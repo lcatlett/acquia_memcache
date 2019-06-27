@@ -1,0 +1,11 @@
+{
+  "name": "drupal/acquia_memcache",
+  "description": "High performance integration with memcache on Acquia.",
+  "type": "drupal-module",
+  "homepage": "http://drupal.org/project/acquia_memcache",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/acquia_memcache"
+  },
+  "license": "GPL-2.0+",
+  "require": { }
+}
