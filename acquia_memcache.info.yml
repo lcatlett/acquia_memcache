@@ -1,0 +1,7 @@
+name: acquia_memcache
+type: module
+description: Turnkey memcache setup and configuration for Acquia sites.
+package: Custom
+core: 8.x
+dependencies:
+  - memcache

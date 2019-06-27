@@ -1,0 +1,40 @@
+services:
+  cache_response_subscriber:
+    class: Drupal\acquia_cache\EventSubscriber\CacheableResponseSubscriber
+    tags:
+      - { name: event_subscriber }
+    arguments: ['@config.factory', '@page_cache_request_policy', '@page_cache_response_policy']
+  acquia_cache.memcache_storage:
+    class: Drupal\acquia_cache\MemcacheStorage
+    arguments: ['@logger.channel.memcache']
+  logger.channel.memcache:
+    parent: logger.channel_base
+    arguments: ['memcache']
+  database:
+    class: Drupal\Core\Database\Connection
+    factory: Drupal\Core\Database\Database::getConnection
+    arguments: ['default']
+  settings:
+    class: Drupal\Core\Site\Settings
+    factory: Drupal\Core\Site\Settings::getInstance
+  memcache.settings:
+    class: Drupal\memcache\MemcacheSettings
+    arguments: ['@settings']
+  memcache.factory:
+    class: Drupal\memcache\Driver\MemcacheDriverFactory
+    arguments: ['@memcache.settings']
+  memcache.timestamp.invalidator.bin:
+    class: Drupal\memcache\Invalidator\MemcacheTimestampInvalidator
+    arguments: ['@memcache.factory', 'memcache_bin_timestamps', 0.001]
+  memcache.backend.cache.container:
+    class: Drupal\memcache\DrupalMemcacheInterface
+    factory: ['@memcache.lock.factory', get]
+    arguments: ['container']
+  cache_tags_provider.container:
+    class: Drupal\Core\Cache\DatabaseCacheTagsChecksum
+    arguments: ['@database']
+  memcache.timestamp.invalidator.bin:
+    class: Drupal\memcache\MemcacheBackend
+    arguments: ['container', '@memcache.backend.cache.container', '@cache_tags_provider.container', '@memcache.timestamp.invalidator.bin','@memcache.settings']
+
+

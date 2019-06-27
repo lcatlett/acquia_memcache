@@ -1,0 +1,57 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the acquia_memcache module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function acquia_memcache_install() {
+  \Drupal::messenger()->addStatus(__FUNCTION__);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function acquia_memcache_uninstall() {
+  \Drupal::messenger()->addStatus(__FUNCTION__);
+}
+
+
+
+/**
+ * Implements hook_requirements().
+ */
+function acquia_memcache_requirements($phase) {
+  $requirements = [];
+
+  $memcached = extension_loaded('memcached');
+
+  if ($phase == 'install' || $phase == 'runtime') {
+
+    if (!$memcached) {
+      $requirements['memcache_extension']['title'] = t('Memcache');
+      $requirements['memcache_extension']['severity'] = REQUIREMENT_ERROR;
+      $requirements['memcache_extension']['value'] = t('Extensions not available');
+      $requirements['memcache_extension']['description'] = t('The <a href="http://php.net/manual/en/book.memcached.php">memcached</a> extension must be installed in order to use acquia_memcache integration.');
+    }
+  }
+
+  if ($phase == 'runtime') {
+    if ($memcache) {
+      // @todo: consider adding minimum version requirement for extensions.
+      $requirements['memcache_extension_version']['title'] = t('Memcache version');
+      $requirements['memcache_extension_version']['severity'] = REQUIREMENT_OK;
+      $requirements['memcache_extension_version']['value'] = phpversion('memcache');
+    }
+    if ($memcached) {
+      $requirements['memcached_extension_version']['title'] = t('Memcached version');
+      $requirements['memcached_extension_version']['severity'] = REQUIREMENT_OK;
+      $requirements['memcached_extension_version']['value'] = phpversion('memcached');
+    }
+  }
+
+  return $requirements;
+}
