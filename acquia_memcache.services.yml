@@ -1,11 +1,11 @@
 services:
   cache_response_subscriber:
-    class: Drupal\acquia_cache\EventSubscriber\CacheableResponseSubscriber
+    class: Drupal\acquia_memcache\EventSubscriber\CacheableResponseSubscriber
     tags:
       - { name: event_subscriber }
     arguments: ['@config.factory', '@page_cache_request_policy', '@page_cache_response_policy']
-  acquia_cache.memcache_storage:
-    class: Drupal\acquia_cache\MemcacheStorage
+  acquia_memcache.memcache_storage:
+    class: Drupal\acquia_memcache\MemcacheStorage
     arguments: ['@logger.channel.memcache']
   logger.channel.memcache:
     parent: logger.channel_base
