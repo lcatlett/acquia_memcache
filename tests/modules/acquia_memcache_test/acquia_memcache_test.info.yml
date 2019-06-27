@@ -1,0 +1,7 @@
+name: 'Acquia Memcache test'
+type: module
+description: 'Support module for Acquia memcache testing.'
+package: Testing
+# core: 8.x
+dependencies:
+  - memcache
